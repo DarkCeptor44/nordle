@@ -1,0 +1,12 @@
+services:
+  nordle:
+    container_name: nordle
+    build: .
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    environment:
+      - NORDLE_PORT=8080  # not needed if you dont change the default
+      - NORDLE_HOST=0.0.0.0  # not needed if you dont change the default
+      #- NORDLE_CACHE_SIZE=100  # default is 10
+      #- NORDLE_DEBUG=true  # default is false
