@@ -15,10 +15,10 @@ use log::{LevelFilter, error, info};
 use simplelog::{ColorChoice, CombinedLogger, ConfigBuilder, TermLogger, TerminalMode};
 use std::{env::var, process::exit, str::FromStr};
 
-const ENV_CACHE_SIZE: &str = "CACHE_SIZE";
-const ENV_DEBUG: &str = "DEBUG";
-const ENV_HOST: &str = "HOST";
-const ENV_PORT: &str = "PORT";
+const ENV_CACHE_SIZE: &str = "NORDLE_CACHE_SIZE";
+const ENV_DEBUG: &str = "NORDLE_DEBUG";
+const ENV_HOST: &str = "NORDLE_HOST";
+const ENV_PORT: &str = "NORDLE_PORT";
 
 #[derive(Debug, Parser)]
 #[command(version, about, long_about = None)]
@@ -26,7 +26,7 @@ pub struct App {
     #[arg(
         short = 'H',
         long,
-        help = "Host to listen on (env: HOST)",
+        help = "Host to listen on (env: NORDLE_HOST)",
         default_value = "0.0.0.0"
     )]
     host: String,
@@ -34,18 +34,22 @@ pub struct App {
     #[arg(
         short,
         long,
-        help = "Port to listen on (env: PORT)",
+        help = "Port to listen on (env: NORDLE_PORT)",
         default_value_t = 8080
     )]
     port: u16,
 
-    #[arg(long, help = "Enable debug logging (env: DEBUG)", default_value_t)]
+    #[arg(
+        long,
+        help = "Enable debug logging (env: NORDLE_DEBUG)",
+        default_value_t
+    )]
     debug: bool,
 
     #[arg(
         short,
         long,
-        help = "Cache size (env: CACHE_SIZE)",
+        help = "Cache size (env: NORDLE_CACHE_SIZE)",
         default_value_t = 10
     )]
     cache_size: u64,
