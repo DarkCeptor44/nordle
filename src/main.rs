@@ -26,7 +26,8 @@ pub struct App {
     #[arg(
         short = 'H',
         long,
-        help = "Host to listen on (env: NORDLE_HOST)",
+        help = "Host to listen on",
+        env = "NORDLE_HOST",
         default_value = "0.0.0.0"
     )]
     host: String,
@@ -34,14 +35,16 @@ pub struct App {
     #[arg(
         short,
         long,
-        help = "Port to listen on (env: NORDLE_PORT)",
+        help = "Port to listen on",
+        env = "NORDLE_PORT",
         default_value_t = 8080
     )]
     port: u16,
 
     #[arg(
         long,
-        help = "Enable debug logging (env: NORDLE_DEBUG)",
+        help = "Enable debug logging",
+        env = "NORDLE_DEBUG",
         default_value_t
     )]
     debug: bool,
@@ -49,7 +52,8 @@ pub struct App {
     #[arg(
         short,
         long,
-        help = "Cache size (env: NORDLE_CACHE_SIZE)",
+        help = "Cache size",
+        env = "NORDLE_CACHE_SIZE",
         default_value_t = 10
     )]
     cache_size: u64,

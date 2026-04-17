@@ -55,19 +55,19 @@ A Wordle clone without limits
 Usage: nordle [OPTIONS]
 
 Options:
-  -H, --host <HOST>              Host to listen on (env: NORDLE_HOST) [default: 0.0.0.0]
-  -p, --port <PORT>              Port to listen on (env: NORDLE_PORT) [default: 8080]
-      --debug                    Enable debug logging (env: NORDLE_DEBUG)
-  -c, --cache-size <CACHE_SIZE>  Cache size (env: NORDLE_CACHE_SIZE) [default: 10]
+  -H, --host <HOST>              Host to listen on [env: NORDLE_HOST=] [default: 0.0.0.0]
+  -p, --port <PORT>              Port to listen on [env: NORDLE_PORT=] [default: 8080]
+      --debug                    Enable debug logging [env: NORDLE_DEBUG=y]
+  -c, --cache-size <CACHE_SIZE>  Cache size [env: NORDLE_CACHE_SIZE=] [default: 10]
   -h, --help                     Print help
   -V, --version                  Print version
 ```
 
-You can also override a bunch of settings with environment variables, see [Environment Variables](#environment-variables).
+There are also environment variables, see [Environment Variables](#environment-variables).
 
 ## Environment Variables
 
-The following environment variables are currently supported, they override the CLI flags:
+The following environment variables are currently supported, they are used if the CLI flags are not set:
 
 | Variable | Default | Description |
 | --- | --- | --- |
