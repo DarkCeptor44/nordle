@@ -1,0 +1,28 @@
+[package]
+name = "nordle"
+version = "0.1.0"
+publish = false
+authors = ["DarkCeptor44"]
+description = "A Wordle clone without limits"
+edition = "2024"
+rust-version = "1.85"
+
+[dependencies]
+anyhow = "1.0.102"
+axum = { version = "0.8.9", features = ["http2"] }
+chrono = "0.4.44"
+clap = { version = "4.6.1", features = ["derive"] }
+colored = "3.1.1"
+cuid2 = "0.1.4"
+dotenvy = "0.15.7"
+log = "0.4.29"
+lru = "0.17.0"
+parking_lot = "0.12.5"
+rand = "0.10.1"
+serde = { version = "1.0.228", features = ["derive"] }
+simplelog = "0.12.2"
+tokio = { version = "1.52.1", features = ["macros", "rt-multi-thread"] }
+tower = "0.5.3"
+tower-http = { version = "0.6.8", features = ["fs"] }
+utoipa = { version = "5.4.0", features = ["axum_extras"] }
+utoipa-swagger-ui = { version = "9.0.2", features = ["axum"] }

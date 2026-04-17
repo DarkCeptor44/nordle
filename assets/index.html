@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en-US">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+		<title>Nordle</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+			rel="stylesheet"
+		/>
+		<style type="text/css">
+			:root {
+				--bg-primary: #0d1117;
+				--bg-secondary: #161b22;
+				--bg-tertiary: #30363d;
+
+				--text-primary: #e6edf3;
+				--text-secondary: #8b949e;
+				--text-miss: #484f58;
+
+				--color-hit: #2ea043;
+				--color-partial: #c69026;
+				--color-miss: #202832;
+
+				--border-default: #30363d;
+				--border-active: #8b949e;
+
+				--cell-size: clamp(40px, 11vmin, 60px);
+				--gap-size: 0.8vmin;
+			}
+
+			* {
+				box-sizing: border-box;
+				outline: none;
+				margin: 0;
+				padding: 0;
+				touch-action: manipulation;
+			}
+
+			body {
+				background-color: var(--bg-primary);
+				color: var(--text-primary);
+				font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				height: 100vh;
+				overflow: hidden;
+				padding-bottom: 20px;
+			}
+
+			header {
+				width: 100%;
+				text-align: center;
+				padding: 10px 0;
+				border-bottom: 1px solid var(--bg-tertiary);
+				margin-bottom: 10px;
+				flex-shrink: 0;
+			}
+
+			h1 {
+				font-size: 2rem;
+				letter-spacing: 0.1em;
+				font-weight: 700;
+				text-transform: uppercase;
+			}
+
+			#game-board {
+				display: grid;
+				grid-template-rows: repeat(6, 1fr);
+				gap: var(--gap-size);
+				padding: 10px;
+				width: fit-content;
+				margin: 0 auto;
+				flex-grow: 1;
+				flex-shrink: 1;
+				min-height: 0;
+				justify-content: center;
+				align-content: center;
+			}
+
+			.row {
+				display: grid;
+				grid-template-columns: repeat(5, 1fr);
+				gap: var(--gap-size);
+			}
+
+			.tile {
+				width: var(--cell-size);
+				height: var(--cell-size);
+				border: 2px solid var(--border-default);
+				border-radius: 4px;
+				display: inline-flex;
+				justify-content: center;
+				align-items: center;
+				font-size: calc(var(--cell-size) * 0.5);
+				font-weight: bold;
+				text-transform: uppercase;
+				user-select: none;
+				transition: transform 0.1s ease-in-out;
+			}
+
+			.tile[data-state="active"] {
+				border-color: var(--border-active);
+				animation: pop 0.1s ease-in-out;
+			}
+
+			.tile[data-state="hit"] {
+				background-color: var(--color-hit);
+				border-color: var(--color-hit);
+				color: white;
+			}
+
+			.tile[data-state="partial"] {
+				background-color: var(--color-partial);
+				border-color: var(--color-partial);
+				color: white;
+			}
+
+			.tile[data-state="miss"] {
+				background-color: var(--color-miss);
+				border-color: var(--color-miss);
+				color: white;
+			}
+
+			@keyframes pop {
+				0% {
+					transform: scale(1);
+				}
+				50% {
+					transform: scale(1.1);
+				}
+				100% {
+					transform: scale(1);
+				}
+			}
+
+			@keyframes flip {
+				0% {
+					transform: rotateX(0);
+					/* border-color: var(--border-active); */
+				}
+				50% {
+					transform: rotateX(90deg);
+					/* border-color: var(--border-active); */
+				}
+				100% {
+					transform: rotateX(0);
+				}
+			}
+
+			.tile.flip {
+				animation: flip 400ms ease-in-out;
+			}
+
+			#keyboard-container {
+				width: 100%;
+				max-width: 500px;
+				padding: 0 8px;
+				margin-top: auto;
+				flex-shrink: 0;
+			}
+
+			.keyboard-row {
+				display: flex;
+				justify-content: center;
+				width: 100%;
+				margin: 0 auto 8px;
+				gap: 6px;
+			}
+
+			.key {
+				font-family: inherit;
+				font-weight: bold;
+				border: 0;
+				padding: 0;
+				margin: 0;
+				height: 58px;
+				border-radius: 4px;
+				cursor: pointer;
+				user-select: none;
+				background-color: var(--bg-tertiary);
+				color: var(--text-primary);
+				flex: 1;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				text-transform: uppercase;
+				font-size: 1.2rem;
+				transition: background-color 0.2s;
+			}
+
+			.key-large {
+				flex: 1.5;
+				font-size: 0.9rem;
+			}
+
+			.key:hover {
+				opacity: 0.8;
+			}
+
+			.key[data-state="hit"] {
+				background-color: var(--color-hit);
+			}
+			.key[data-state="partial"] {
+				background-color: var(--color-partial);
+			}
+			.key[data-state="miss"] {
+				background-color: var(--color-miss);
+				color: var(--text-miss);
+				opacity: 0.7;
+			}
+
+			#toast-container {
+				position: fixed;
+				top: 10%;
+				left: 50%;
+				transform: translateX(-50%);
+				z-index: 100;
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
+				pointer-events: none;
+			}
+
+			.toast {
+				background-color: var(--text-primary);
+				color: var(--bg-primary);
+				padding: 10px 20px;
+				border-radius: 4px;
+				font-weight: bold;
+				opacity: 1;
+				transition: opacity 0.3s;
+			}
+
+			@media (min-width: 600px) {
+				:root {
+					--cell-size: 60px;
+					--gap-size: 5px;
+				}
+
+				#game-board {
+					max-height: none;
+				}
+
+				h1 {
+					font-size: 2.5rem;
+				}
+			}
+
+			@media (max-height: 700px) {
+				:root {
+					--cell-size: 10vmin;
+				}
+				.key {
+					height: 45px;
+				}
+				h1 {
+					font-size: 1.5rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<header>
+			<h1>Nordle</h1>
+		</header>
+
+		<div id="toast-container"></div>
+
+		<div id="game-board">
+			<div class="row" id="row-0">
+				<div class="tile" id="row-0-tile-0"></div>
+				<div class="tile" id="row-0-tile-1"></div>
+				<div class="tile" id="row-0-tile-2"></div>
+				<div class="tile" id="row-0-tile-3"></div>
+				<div class="tile" id="row-0-tile-4"></div>
+			</div>
+			<div class="row" id="row-1">
+				<div class="tile" id="row-1-tile-0"></div>
+				<div class="tile" id="row-1-tile-1"></div>
+				<div class="tile" id="row-1-tile-2"></div>
+				<div class="tile" id="row-1-tile-3"></div>
+				<div class="tile" id="row-1-tile-4"></div>
+			</div>
+			<div class="row" id="row-2">
+				<div class="tile" id="row-2-tile-0"></div>
+				<div class="tile" id="row-2-tile-1"></div>
+				<div class="tile" id="row-2-tile-2"></div>
+				<div class="tile" id="row-2-tile-3"></div>
+				<div class="tile" id="row-2-tile-4"></div>
+			</div>
+			<div class="row" id="row-3">
+				<div class="tile" id="row-3-tile-0"></div>
+				<div class="tile" id="row-3-tile-1"></div>
+				<div class="tile" id="row-3-tile-2"></div>
+				<div class="tile" id="row-3-tile-3"></div>
+				<div class="tile" id="row-3-tile-4"></div>
+			</div>
+			<div class="row" id="row-4">
+				<div class="tile" id="row-4-tile-0"></div>
+				<div class="tile" id="row-4-tile-1"></div>
+				<div class="tile" id="row-4-tile-2"></div>
+				<div class="tile" id="row-4-tile-3"></div>
+				<div class="tile" id="row-4-tile-4"></div>
+			</div>
+			<div class="row" id="row-5">
+				<div class="tile" id="row-5-tile-0"></div>
+				<div class="tile" id="row-5-tile-1"></div>
+				<div class="tile" id="row-5-tile-2"></div>
+				<div class="tile" id="row-5-tile-3"></div>
+				<div class="tile" id="row-5-tile-4"></div>
+			</div>
+		</div>
+
+		<div id="keyboard-container">
+			<div class="keyboard-row">
+				<button class="key" data-key="Q">Q</button>
+				<button class="key" data-key="W">W</button>
+				<button class="key" data-key="E">E</button>
+				<button class="key" data-key="R">R</button>
+				<button class="key" data-key="T">T</button>
+				<button class="key" data-key="Y">Y</button>
+				<button class="key" data-key="U">U</button>
+				<button class="key" data-key="I">I</button>
+				<button class="key" data-key="O">O</button>
+				<button class="key" data-key="P">P</button>
+			</div>
+			<div class="keyboard-row">
+				<div style="flex: 0.5"></div>
+				<button class="key" data-key="A">A</button>
+				<button class="key" data-key="S">S</button>
+				<button class="key" data-key="D">D</button>
+				<button class="key" data-key="F">F</button>
+				<button class="key" data-key="G">G</button>
+				<button class="key" data-key="H">H</button>
+				<button class="key" data-key="J">J</button>
+				<button class="key" data-key="K">K</button>
+				<button class="key" data-key="L">L</button>
+				<div style="flex: 0.5"></div>
+			</div>
+			<div class="keyboard-row">
+				<button class="key key-large" data-key="ENTER">Enter</button>
+				<button class="key" data-key="Z">Z</button>
+				<button class="key" data-key="X">X</button>
+				<button class="key" data-key="C">C</button>
+				<button class="key" data-key="V">V</button>
+				<button class="key" data-key="B">B</button>
+				<button class="key" data-key="N">N</button>
+				<button class="key" data-key="M">M</button>
+				<button class="key key-large" data-key="BACK">⌫</button>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			const WORD_LENGTH = 5;
+			const MAX_GUESSES = 6;
+
+			let gameId = "";
+			let currentGuess = "";
+			let guesses = [];
+			let isGameOver = false;
+			let isAnimating = false;
+
+			function initGame() {
+				const keys = document.querySelectorAll(".key");
+				keys.forEach((key) => {
+					key.addEventListener("click", (e) => {
+						e.preventDefault();
+						handleInput(key.getAttribute("data-key"));
+					});
+				});
+
+				document.addEventListener("keydown", handlePhysicalKeyboard);
+			}
+
+			function handlePhysicalKeyboard(e) {
+				if (isGameOver || isAnimating) return;
+
+				const key = e.key.toUpperCase();
+
+				if (key === "ENTER") handleInput("ENTER");
+				else if (key === "BACKSPACE") handleInput("BACK");
+				else if (/^[A-Z]$/.test(key)) handleInput(key);
+			}
+
+			async function handleInput(key) {
+				if (isGameOver || isAnimating) return;
+
+				if (key === "BACK") {
+					currentGuess = currentGuess.slice(0, -1);
+					updateGrid();
+					return;
+				}
+
+				if (key === "ENTER") {
+					if (currentGuess.length !== WORD_LENGTH) {
+						showToast("Not enough letters");
+						shakeRow();
+						return;
+					}
+
+					try {
+						const response = await fetch(
+							`/api/v1/check/${currentGuess.toLowerCase()}`,
+						);
+						const data = await response.json();
+
+						if (!data.valid) {
+							showToast("Not in word list");
+							shakeRow();
+							return;
+						}
+					} catch (e) {
+						showToast("Server error");
+						return;
+					}
+
+					submitGuess();
+					return;
+				}
+
+				if (currentGuess.length < WORD_LENGTH) {
+					currentGuess += key;
+					updateGrid();
+
+					const tile = document.getElementById(
+						`row-${guesses.length}-tile-${currentGuess.length - 1}`,
+					);
+					tile.style.animation = "none";
+					tile.offsetHeight;
+					tile.style.animation = "pop 0.1s ease-in-out";
+				}
+			}
+
+			function updateGrid() {
+				const currentRowIndex = guesses.length;
+				for (let i = 0; i < WORD_LENGTH; i++) {
+					const tile = document.getElementById(
+						`row-${currentRowIndex}-tile-${i}`,
+					);
+					tile.textContent = currentGuess[i] || "";
+
+					if (currentGuess[i]) {
+						tile.setAttribute("data-state", "active");
+					} else {
+						tile.removeAttribute("data-state");
+					}
+				}
+			}
+
+			async function getGame() {
+				try {
+					const response = await fetch("/api/v1/new");
+					const data = await response.json();
+
+					gameId = data.game_id;
+					console.log("Game ID initialized:", gameId);
+				} catch (e) {
+					console.error("Failed to get new game", e);
+				}
+			}
+
+			async function submitGuess() {
+				isAnimating = true;
+				const guess = currentGuess.toLowerCase();
+				const currentRowIndex = guesses.length;
+
+				const STAGGER = 100;
+				const FLIP_DURATION = 400;
+				const HALF_FLIP = 200;
+
+				try {
+					const response = await fetch("/api/v1/guess", {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ id: gameId, guess: guess }),
+					});
+
+					if (!response.ok) throw new Error("Invalid guess request");
+
+					const data = await response.json();
+					const result = data.result;
+
+					result.forEach((status, i) => {
+						const tile = document.getElementById(
+							`row-${currentRowIndex}-tile-${i}`,
+						);
+
+						setTimeout(() => {
+							tile.classList.add("flip");
+							setTimeout(() => {
+								tile.setAttribute("data-state", status);
+								updateKeyboardColor(currentGuess[i], status);
+							}, HALF_FLIP);
+						}, i * STAGGER);
+					});
+
+					setTimeout(
+						() => {
+							guesses.push(currentGuess);
+							const won = data.won;
+							const lost = guesses.length >= MAX_GUESSES && !won;
+
+							if (won) {
+								showToast(getRandomPraise());
+								isGameOver = true;
+								triggerWinAnimation(currentRowIndex);
+							} else if (lost) {
+								showToast("Game Over");
+								isGameOver = true;
+							}
+
+							currentGuess = "";
+							isAnimating = false;
+						},
+						(WORD_LENGTH - 1) * STAGGER + FLIP_DURATION,
+					);
+				} catch (e) {
+					showToast("Error connecting to server");
+					isAnimating = false;
+				}
+			}
+
+			function checkGuess(guess, target) {
+				const result = new Array(WORD_LENGTH).fill("miss");
+				const targetArr = target.split("");
+				const guessArr = guess.split("");
+
+				guessArr.forEach((char, i) => {
+					if (char === targetArr[i]) {
+						result[i] = "hit";
+						targetArr[i] = null;
+						guessArr[i] = null;
+					}
+				});
+
+				guessArr.forEach((char, i) => {
+					if (char && targetArr.includes(char)) {
+						result[i] = "partial";
+						targetArr[targetArr.indexOf(char)] = null;
+					}
+				});
+
+				return result;
+			}
+
+			function updateKeyboardColor(letter, status) {
+				const keyBtn = document.querySelector(
+					`.key[data-key="${letter}"]`,
+				);
+				if (!keyBtn) return;
+
+				const currentState = keyBtn.getAttribute("data-state");
+
+				if (status === "hit") {
+					keyBtn.setAttribute("data-state", "hit");
+				} else if (status === "partial" && currentState !== "hit") {
+					keyBtn.setAttribute("data-state", "partial");
+				} else if (
+					status === "miss" &&
+					currentState !== "hit" &&
+					currentState !== "partial"
+				) {
+					keyBtn.setAttribute("data-state", "miss");
+				}
+			}
+
+			function shakeRow() {
+				const row = document.getElementById(`row-${guesses.length}`);
+				row.classList.add("shake");
+				setTimeout(() => row.classList.remove("shake"), 500);
+			}
+
+			function showToast(message) {
+				const container = document.getElementById("toast-container");
+				const toast = document.createElement("div");
+				toast.className = "toast";
+				toast.textContent = message;
+				container.appendChild(toast);
+
+				setTimeout(() => {
+					toast.style.opacity = "0";
+					setTimeout(() => container.removeChild(toast), 300);
+				}, 2000);
+			}
+
+			function getRandomPraise() {
+				const praises = ["Splendid!", "Impressive!", "Nice!", "Great!"];
+				return praises[Math.floor(Math.random() * praises.length)];
+			}
+
+			function triggerWinAnimation(rowIndex) {
+				for (let i = 0; i < WORD_LENGTH; i++) {
+					const tile = document.getElementById(
+						`row-${rowIndex}-tile-${i}`,
+					);
+					setTimeout(() => {
+						tile.style.animation = "pop 0.5s 4s alternate";
+					}, i * 100);
+				}
+			}
+
+			getGame();
+			initGame();
+		</script>
+	</body>
+</html>
