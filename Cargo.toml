@@ -10,6 +10,7 @@ homepage = "https://github.com/DarkCeptor44/nordle"
 repository = "https://github.com/DarkCeptor44/nordle"
 keywords = ["game", "wordle", "axum", "web"]
 categories = ["games", "web-programming::http-server"]
+include = ["assets/**/*", "src/**/*", "Cargo.toml", "LICENSE", "README.md"]
 
 [dependencies]
 anyhow = "1.0.102"
