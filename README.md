@@ -1,5 +1,7 @@
 # Nordle
 
+[![crates.io](https://img.shields.io/crates/v/nordle.svg)](https://crates.io/crates/nordle)
+
 A self-hostable Wordle clone without limits, you might think it comes from Nord + Wordle but it's actually Not-Wordle. There is no persistence, the server uses a LRU cache to store the words and game session IDs. Every reload gives you a new session ID with a new word to guess, and there's obviously no reward for guessing correctly.
 
 The word list is from [this](https://gist.github.com/scholtes/94f3c0303ba6a7768b47583aff36654d) Gist by scholtes.
@@ -32,10 +34,16 @@ nordle
     cd nordle
     ```
 
-3. Run in debug mode (in debug the server servers the HTML file locally instead of embedding it):
+3. Run in development mode (the server serves the HTML file locally instead of embedding it):
 
     ```bash
     cargo run
+    ```
+
+    If you want to see debugging details, add the `--debug` flag:
+
+    ```bash
+    cargo run -- --debug
     ```
 
 4. (Optional) Install it with release mode:
@@ -78,4 +86,4 @@ The following environment variables are currently supported, they are used if th
 
 ## License
 
-This project is licensed under the Mozilla Public License, version 2.0. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the [Mozilla Public License, version 2.0](https://www.mozilla.org/MPL/2.0/). See the [LICENSE](LICENSE) file for details.
