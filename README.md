@@ -112,7 +112,7 @@ The minimum supported Rust version is:
 
 | Version | Edition | MSRV |
 | --- | --- | --- |
-| 0.1.0 | 2024 | 1.88 |
+| 0.1.0 - 0.1.1 | 2024 | 1.88 |
 
 ## Environment Variables
 
