@@ -134,13 +134,12 @@ async fn guess(
     }
 
     for i in 0..5 {
-        if results[i] != "hit" {
-            if let Some(count) = target_counts.get_mut(&guess_chars[i]) {
-                if *count > 0 {
-                    results[i] = "partial";
-                    *count -= 1;
-                }
-            }
+        if results[i] != "hit"
+            && let Some(count) = target_counts.get_mut(&guess_chars[i])
+            && *count > 0
+        {
+            results[i] = "partial";
+            *count -= 1;
         }
     }
 
