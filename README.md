@@ -17,7 +17,7 @@ The word list is from [this](https://gist.github.com/scholtes/94f3c0303ba6a7768b
 
 ## Getting Started
 
-You can run your own Nordle server either by installing it from [crates.io](https://crates.io/crates/nordle) or by building it from source.
+You can run your own Nordle server either by installing it from [crates.io](https://crates.io/crates/nordle), through [Docker](#docker), or by building it from source. Docker is the only option that doesn't require installing [Rust](https://rustup.rs).
 
 ### From crates.io
 
@@ -33,9 +33,33 @@ This will compile the binary and place it in your cargo bin path. You can then s
 nordle
 ```
 
+### Docker
+
+Docker is probably the second easiest way to run a server (first being cargo since you only need to install Rust). There are Docker images available in this repo, you can run them with:
+
+```bash
+docker run -p 8080:8080 darkceptor44/nordle:latest
+```
+
+This will start the server on port 8080.
+
+If you want to use Docker Compose instead, there's a [compose.yml](./compose.yml) file that you can use:
+
+```yaml
+services:
+  nordle:
+    container_name: nordle
+    image: ghcr.io/darkceptor44/nordle:latest
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+```
+
+For a list of available environment variables you can pass to the container, see [Environment Variables](#environment-variables).
+
 ### From Source
 
-1. **Prerequisites:** Ensure you have the [Rust toolchain](https://rustup.rs/) installed (Edition 2024 requires Rust 1.85+).
+1. **Prerequisites:** Ensure you have the [Rust toolchain](https://rustup.rs/) installed (see [MSRV](#msrv) to know what Rust version you need).
 2. Clone the repo:
 
     ```bash
