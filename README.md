@@ -84,6 +84,12 @@ The following environment variables are currently supported, they are used if th
 | `NORDLE_HOST` | `0.0.0.0` | Host to listen on |
 | `NORDLE_PORT` | `8080` | Port to listen on |
 
+## Audits
+
+| Auditor | Version | Vulnerabilities |
+| --- | --- | --- |
+| [cargo-audit](https://crates.io/crates/cargo-audit) | 0.1.0 | 0 |
+
 ## License
 
 This project is licensed under the [Mozilla Public License, version 2.0](https://www.mozilla.org/MPL/2.0/). See the [LICENSE](LICENSE) file for details.
