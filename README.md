@@ -4,13 +4,20 @@
 
 [![crates.io](https://img.shields.io/crates/v/nordle.svg)](https://crates.io/crates/nordle)
 
-A self-hostable Wordle clone without limits, you might think it comes from Nord + Wordle but it's actually Not-Wordle. There is no persistence, the server uses a LRU cache to store the words and game session IDs. Every reload gives you a new session ID with a new word to guess, and the only reward for guessing correctly is a "good job".
+A self-hostable Wordle clone without limits, you might think the name comes from Nord + Wordle but it's actually Not-Wordle. Features include:
+
+* No persistence/no logins
+* LRU cache to store the words and game session IDs
+* Every page load gives you a new session ID with a new word to guess
+* No Node.JS or web frameworks used, just pure HTML, CSS and JS
+* HTML file is embedded into the binary
+* The only reward for guessing correctly is a "good job"
 
 The word list is from [this](https://gist.github.com/scholtes/94f3c0303ba6a7768b47583aff36654d) Gist by scholtes.
 
 ## Getting Started
 
-You can run your own Nordle server either by installing it from crates.io or by building it from source.
+You can run your own Nordle server either by installing it from [crates.io](https://crates.io/crates/nordle) or by building it from source.
 
 ### From crates.io
 
