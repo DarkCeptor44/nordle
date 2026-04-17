@@ -1,5 +1,7 @@
 # Nordle
 
+![Nordle page](./assets/page.png)
+
 [![crates.io](https://img.shields.io/crates/v/nordle.svg)](https://crates.io/crates/nordle)
 
 A self-hostable Wordle clone without limits, you might think it comes from Nord + Wordle but it's actually Not-Wordle. There is no persistence, the server uses a LRU cache to store the words and game session IDs. Every reload gives you a new session ID with a new word to guess, and the only reward for guessing correctly is a "good job".
