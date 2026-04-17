@@ -6,6 +6,7 @@ authors = ["DarkCeptor44"]
 description = "A Wordle clone without limits"
 edition = "2024"
 rust-version = "1.85"
+license = "MPL-2.0"
 
 [dependencies]
 anyhow = "1.0.102"
