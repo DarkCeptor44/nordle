@@ -65,7 +65,7 @@ Usage: nordle [OPTIONS]
 Options:
   -H, --host <HOST>              Host to listen on [env: NORDLE_HOST=] [default: 0.0.0.0]
   -p, --port <PORT>              Port to listen on [env: NORDLE_PORT=] [default: 8080]
-      --debug                    Enable debug logging [env: NORDLE_DEBUG=y]
+      --debug                    Enable debug logging [env: NORDLE_DEBUG=]
   -c, --cache-size <CACHE_SIZE>  Cache size [env: NORDLE_CACHE_SIZE=] [default: 10]
   -h, --help                     Print help
   -V, --version                  Print version
@@ -80,7 +80,7 @@ The following environment variables are currently supported, they are used if th
 | Variable | Default | Description |
 | --- | --- | --- |
 | `NORDLE_CACHE_SIZE` | `10` | Size of the LRU cache |
-| `NORDLE_DEBUG` | (empty) | Enable debug logging |
+| `NORDLE_DEBUG` | `false` | Enable debug logging |
 | `NORDLE_HOST` | `0.0.0.0` | Host to listen on |
 | `NORDLE_PORT` | `8080` | Port to listen on |
 

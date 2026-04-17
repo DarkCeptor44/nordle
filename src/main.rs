@@ -13,12 +13,7 @@ use clap::Parser;
 use dotenvy::dotenv;
 use log::{LevelFilter, error, info};
 use simplelog::{ColorChoice, CombinedLogger, ConfigBuilder, TermLogger, TerminalMode};
-use std::{env::var, process::exit, str::FromStr};
-
-const ENV_CACHE_SIZE: &str = "NORDLE_CACHE_SIZE";
-const ENV_DEBUG: &str = "NORDLE_DEBUG";
-const ENV_HOST: &str = "NORDLE_HOST";
-const ENV_PORT: &str = "NORDLE_PORT";
+use std::process::exit;
 
 #[derive(Debug, Parser)]
 #[command(version, about, long_about = None)]
@@ -63,12 +58,7 @@ pub struct App {
 async fn main() {
     dotenv().ok();
 
-    let mut args = App::parse();
-    args.debug = is_env(ENV_DEBUG) || args.debug;
-    args.host = env(ENV_HOST, args.host);
-    args.port = env(ENV_PORT, args.port);
-    args.cache_size = env(ENV_CACHE_SIZE, args.cache_size);
-
+    let args = App::parse();
     if let Err(e) = init_logger(args.debug).context("failed to init logger") {
         eprintln!("CRITICAL: {e:?}");
         exit(1);
@@ -82,26 +72,6 @@ async fn main() {
         error!("Application logic: {e:?}");
         exit(1);
     }
-}
-
-/// Get an environment variable or return a default value
-///
-/// ## Arguments
-///
-/// * `key` - The name of the environment variable
-/// * `default` - The default value to return if the environment variable is not set
-///
-/// ## Returns
-///
-/// * `T` - The type of the environment variable
-#[must_use]
-pub fn env<S, T>(key: S, default: T) -> T
-where
-    S: AsRef<str>,
-    T: FromStr,
-{
-    let value = var(key.as_ref()).ok().and_then(|s| s.parse().ok());
-    value.unwrap_or(default)
 }
 
 /// Initialize the logger
@@ -137,21 +107,4 @@ fn init_logger(debug: bool) -> Result<()> {
         ColorChoice::Auto,
     )])
     .map_err(|e| anyhow!(e))
-}
-
-/// Check if an environment variable is set
-///
-/// ## Arguments
-///
-/// * `name` - The name of the environment variable
-///
-/// ## Returns
-///
-/// * `bool` - `true` if the environment variable is set, `false` otherwise
-#[must_use]
-pub fn is_env<S>(name: S) -> bool
-where
-    S: AsRef<str>,
-{
-    !var(name.as_ref()).unwrap_or_default().trim().is_empty()
 }
