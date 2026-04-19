@@ -49,7 +49,7 @@ pub struct App {
         long,
         help = "Cache size",
         env = "NORDLE_CACHE_SIZE",
-        default_value_t = 10
+        default_value_t = 100
     )]
     cache_size: u64,
 }
