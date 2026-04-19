@@ -30,6 +30,7 @@
 				--color-hit: #2ea043;
 				--color-partial: #c69026;
 				--color-miss: #202832;
+				--color-error: #f85149;
 
 				--border-default: #30363d;
 				--border-active: #8b949e;
@@ -234,18 +235,38 @@
 				z-index: 100;
 				display: flex;
 				flex-direction: column;
+				align-items: center;
 				gap: 10px;
 				pointer-events: none;
 			}
 
 			.toast {
-				background-color: var(--text-primary);
-				color: var(--bg-primary);
-				padding: 10px 20px;
+				background-color: var(--bg-secondary);
+				color: var(--text-primary);
+				padding: 12px 24px;
 				border-radius: 4px;
 				font-weight: bold;
+				opacity: 0;
+				transition:
+					opacity 0.3s,
+					transform 0.3s;
+				transform: translateY(-20px);
+				border: 1px solid var(--border-default);
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+				white-space: nowrap;
+			}
+
+			.toast.success {
+				border-color: var(--color-hit);
+			}
+
+			.toast.error {
+				border-color: var(--color-error);
+			}
+
+			.toast.show {
 				opacity: 1;
-				transition: opacity 0.3s;
+				transform: translateY(0);
 			}
 
 			@media (min-width: 600px) {
@@ -414,7 +435,7 @@
 
 				if (key === "ENTER") {
 					if (currentGuess.length !== WORD_LENGTH) {
-						showToast("Not enough letters");
+						showToast("Not enough letters", "error");
 						shakeRow();
 						return;
 					}
@@ -426,12 +447,12 @@
 						const data = await response.json();
 
 						if (!data.valid) {
-							showToast("Not in word list");
+							showToast("Not in word list", "error");
 							shakeRow();
 							return;
 						}
 					} catch (e) {
-						showToast("Server error");
+						showToast("Server error", "error");
 						return;
 					}
 
@@ -477,7 +498,7 @@
 					console.log("Game ID initialized:", gameId);
 				} catch (e) {
 					console.error("Failed to get new game", e);
-					showToast("Error connecting to server");
+					showToast("Error connecting to server", "error");
 				}
 			}
 
@@ -523,7 +544,7 @@
 							const lost = guesses.length >= MAX_GUESSES && !won;
 
 							if (won) {
-								showToast(getRandomPraise());
+								showToast(getRandomPraise(), "success");
 								isGameOver = true;
 								triggerWinAnimation(currentRowIndex);
 							} else if (lost) {
@@ -537,7 +558,7 @@
 						(WORD_LENGTH - 1) * STAGGER + FLIP_DURATION,
 					);
 				} catch (e) {
-					showToast("Error connecting to server");
+					showToast("Error connecting to server", "error");
 					isAnimating = false;
 				}
 			}
@@ -592,16 +613,24 @@
 				setTimeout(() => row.classList.remove("shake"), 500);
 			}
 
-			function showToast(message) {
+			function showToast(message, type = "info") {
 				const container = document.getElementById("toast-container");
 				const toast = document.createElement("div");
-				toast.className = "toast";
+
+				toast.className = `toast ${type}`;
 				toast.textContent = message;
 				container.appendChild(toast);
 
+				toast.offsetHeight;
+				toast.classList.add("show");
+
 				setTimeout(() => {
-					toast.style.opacity = "0";
-					setTimeout(() => container.removeChild(toast), 300);
+					toast.classList.remove("show");
+					setTimeout(() => {
+						if (container.contains(toast)) {
+							container.removeChild(toast);
+						}
+					}, 300);
 				}, 2000);
 			}
 
@@ -640,7 +669,7 @@
 
 					console.log("Word chosen:", word);
 				} catch (e) {
-					showToast("Error connecting to server");
+					showToast("Error connecting to server", "error");
 					console.error("Failed to choose word:", e);
 				}
 			}
