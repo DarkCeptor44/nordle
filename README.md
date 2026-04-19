@@ -7,10 +7,10 @@
 A self-hostable Wordle clone without limits, you might think the name comes from Nord + Wordle but it's actually Not-Wordle. Features include:
 
 * No persistence/no logins
-* LRU cache to store the words and game session IDs
+* Uses LRU cache to store the words and game session IDs
 * Every page load gives you a new session ID with a new word to guess
 * No Node.JS or web frameworks used, just pure HTML, CSS and JS
-* HTML file is embedded into the binary
+* HTML file is embedded into the binary on build
 * The only reward for guessing correctly is a "good job"
 
 The word list is from [this](https://gist.github.com/scholtes/94f3c0303ba6a7768b47583aff36654d) Gist by scholtes.
@@ -55,7 +55,15 @@ services:
       - 8080:8080
 ```
 
-For a list of available environment variables you can pass to the container, see [Environment Variables](#environment-variables).
+For a list of available environment variables you can pass to the container, see [Environment Variables](#environment-variables). To add them you use:
+
+```yaml
+services:
+  nordle:
+    # ...
+    environment:
+      - ENV_NAME=VALUE
+```
 
 ### From Source
 
