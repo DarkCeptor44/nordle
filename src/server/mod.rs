@@ -19,7 +19,7 @@ use std::{
 use tokio::net::TcpListener;
 
 pub struct Service {
-    cache: Mutex<LruCache<String, String>>,
+    cache: Mutex<LruCache<String, (u8, String)>>,
     words: Vec<&'static str>,
 }
 

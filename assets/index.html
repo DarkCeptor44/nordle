@@ -541,15 +541,18 @@
 						() => {
 							guesses.push(currentGuess);
 							const won = data.won;
-							const lost = guesses.length >= MAX_GUESSES && !won;
+							const lost =
+								guesses.length >= MAX_GUESSES &&
+								!won &&
+								data.target;
 
 							if (won) {
-								showToast(getRandomPraise(), "success");
 								isGameOver = true;
+								showToast(getRandomPraise(), "success");
 								triggerWinAnimation(currentRowIndex);
 							} else if (lost) {
-								showToast("Game Over");
 								isGameOver = true;
+								showToast("Game Over");
 							}
 
 							currentGuess = "";
@@ -653,7 +656,7 @@
 			async function chooseWord(word) {
 				if (word.length !== WORD_LENGTH) return;
 
-				reset(false);
+				await reset(false);
 
 				try {
 					const response = await fetch("/api/v1/choose", {
@@ -674,7 +677,7 @@
 				}
 			}
 
-			async function reset(fetchNewGame = true) {
+			async function reset() {
 				for (let i = 0; i < MAX_GUESSES; i++) {
 					for (let j = 0; j < WORD_LENGTH; j++) {
 						const tile = document.getElementById(
@@ -685,14 +688,12 @@
 					}
 				}
 
+				gameId = "";
 				currentGuess = "";
 				guesses = [];
 				isGameOver = false;
 
-				if (fetchNewGame) {
-					gameId = "";
-					await getGame();
-				}
+				await getGame();
 			}
 
 			getGame();
