@@ -620,6 +620,34 @@
 				}
 			}
 
+			async function chooseWord(word) {
+				if (word.length !== WORD_LENGTH) return;
+
+				isAnimating = true;
+
+				try {
+					const response = await fetch("/api/v1/choose", {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({
+							id: gameId,
+							word: word,
+						}),
+					});
+
+					if (!response.ok) throw new Error("Invalid choose request");
+
+					isAnimating = false;
+
+					initGame();
+
+					console.log("Word chosen:", word);
+				} catch (e) {
+					showToast("Error connecting to server");
+					isAnimating = false;
+				}
+			}
+
 			getGame();
 			initGame();
 		</script>

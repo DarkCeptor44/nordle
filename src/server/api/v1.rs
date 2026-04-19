@@ -23,9 +23,10 @@ use utoipa::{OpenApi, ToSchema};
 #[derive(OpenApi)]
 #[openapi(
     info(title = "Nordle API v1", version = "1.0.0"),
-    paths(check, guess, health, new),
+    paths(check, choose, guess, health, new),
     components(schemas(
         CheckResponse,
+        ChooseRequest,
         GuessRequest,
         GuessResponse,
         GuessError,
@@ -38,6 +39,7 @@ pub struct ApiDocV1;
 pub fn routes() -> Router<Arc<Service>> {
     Router::new()
         .route("/check/{word}", get(check))
+        .route("/choose", post(choose))
         .route("/guess", post(guess))
         .route("/health", get(health))
         .route("/new", get(new))
@@ -64,6 +66,31 @@ async fn check(Path(word): Path<String>) -> impl IntoResponse {
 
     debug!("validation check for: word={word} valid={valid}");
     (StatusCode::OK, Json(CheckResponse { word: &word, valid })).into_response()
+}
+
+#[derive(Deserialize, ToSchema)]
+struct ChooseRequest {
+    /// Game session ID
+    id: String,
+
+    /// Target word
+    word: String,
+}
+
+/// Choose a target word (don't use this to cheat)
+#[utoipa::path(post, path = "/api/v1/choose", request_body(content = ChooseRequest, description = "The object sent to the endpoint", examples(
+    ("Example" = (value = json!({"id":"lprcp4yara","word":"abore"}))),
+)),responses(
+    (status = 200, description = "Word chosen successfully"),
+))]
+async fn choose(
+    State(service): State<Arc<Service>>,
+    Json(payload): Json<ChooseRequest>,
+) -> impl IntoResponse {
+    let mut cache = service.cache.lock();
+    cache.put(payload.id.clone(), payload.word.clone());
+
+    debug!("word chosen: id={} word={}", payload.id, payload.word);
 }
 
 #[derive(Deserialize, ToSchema)]
