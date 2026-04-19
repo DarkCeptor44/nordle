@@ -13,6 +13,10 @@ docs = { omit_from_changelog = true }
 
 [changelog]
 path = "CHANGELOG.md"
+template = "remote"
+remote = "github.com"
+owner = "DarkCeptor44"
+repository = "nordle"
 authors = [{ signature = "Murilo Pagliuso", username = "DarkCeptor44" }]
 
 [bump_profiles.default]
