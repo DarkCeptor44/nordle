@@ -477,6 +477,7 @@
 					console.log("Game ID initialized:", gameId);
 				} catch (e) {
 					console.error("Failed to get new game", e);
+					showToast("Error connecting to server");
 				}
 			}
 
@@ -623,7 +624,7 @@
 			async function chooseWord(word) {
 				if (word.length !== WORD_LENGTH) return;
 
-				isAnimating = true;
+				await reset();
 
 				try {
 					const response = await fetch("/api/v1/choose", {
@@ -637,15 +638,30 @@
 
 					if (!response.ok) throw new Error("Invalid choose request");
 
-					isAnimating = false;
-
-					initGame();
-
 					console.log("Word chosen:", word);
 				} catch (e) {
 					showToast("Error connecting to server");
-					isAnimating = false;
+					console.error("Failed to choose word:", e);
 				}
+			}
+
+			async function reset() {
+				for (let i = 0; i < MAX_GUESSES; i++) {
+					for (let j = 0; j < WORD_LENGTH; j++) {
+						const tile = document.getElementById(
+							`row-${i}-tile-${j}`,
+						);
+						tile.textContent = "";
+						tile.removeAttribute("data-state");
+					}
+				}
+
+				gameId = "";
+				currentGuess = "";
+				guesses = [];
+				isGameOver = false;
+
+				await getGame();
 			}
 
 			getGame();
