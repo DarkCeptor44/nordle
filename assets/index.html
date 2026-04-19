@@ -131,32 +131,6 @@
 				color: white;
 			}
 
-			@keyframes pop {
-				0% {
-					transform: scale(1);
-				}
-				50% {
-					transform: scale(1.1);
-				}
-				100% {
-					transform: scale(1);
-				}
-			}
-
-			@keyframes flip {
-				0% {
-					transform: rotateX(0);
-					/* border-color: var(--border-active); */
-				}
-				50% {
-					transform: rotateX(90deg);
-					/* border-color: var(--border-active); */
-				}
-				100% {
-					transform: rotateX(0);
-				}
-			}
-
 			.tile.flip {
 				animation: flip 400ms ease-in-out;
 			}
@@ -267,6 +241,32 @@
 			.toast.show {
 				opacity: 1;
 				transform: translateY(0);
+			}
+
+			@keyframes pop {
+				0% {
+					transform: scale(1);
+				}
+				50% {
+					transform: scale(1.1);
+				}
+				100% {
+					transform: scale(1);
+				}
+			}
+
+			@keyframes flip {
+				0% {
+					transform: rotateX(0);
+					/* border-color: var(--border-active); */
+				}
+				50% {
+					transform: rotateX(90deg);
+					/* border-color: var(--border-active); */
+				}
+				100% {
+					transform: rotateX(0);
+				}
 			}
 
 			@media (min-width: 600px) {
