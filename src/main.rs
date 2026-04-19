@@ -51,7 +51,7 @@ pub struct App {
         env = "NORDLE_CACHE_SIZE",
         default_value_t = 100
     )]
-    cache_size: u64,
+    cache_size: usize,
 }
 
 #[tokio::main]
