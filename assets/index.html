@@ -653,7 +653,7 @@
 			async function chooseWord(word) {
 				if (word.length !== WORD_LENGTH) return;
 
-				await reset();
+				reset(false);
 
 				try {
 					const response = await fetch("/api/v1/choose", {
@@ -674,7 +674,7 @@
 				}
 			}
 
-			async function reset() {
+			async function reset(fetchNewGame = true) {
 				for (let i = 0; i < MAX_GUESSES; i++) {
 					for (let j = 0; j < WORD_LENGTH; j++) {
 						const tile = document.getElementById(
@@ -685,12 +685,14 @@
 					}
 				}
 
-				gameId = "";
 				currentGuess = "";
 				guesses = [];
 				isGameOver = false;
 
-				await getGame();
+				if (fetchNewGame) {
+					gameId = "";
+					await getGame();
+				}
 			}
 
 			getGame();
