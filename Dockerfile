@@ -1,5 +1,5 @@
 # stage 1: chef
-FROM lukemathwalker/cargo-chef:latest-rust-1.88.0-slim AS chef
+FROM lukemathwalker/cargo-chef:latest-rust-1.88.0 AS chef
 WORKDIR /app
 
 # stage 2: planner
