@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.2.2](https://github.com/DarkCeptor44/nordle/compare/fbd9ccba5cab9a937b69640b56134081b7f216cc..v0.2.2) - 2026-04-20
+#### Bug Fixes
+- (**ci**) use non-slim version of rust image - ([fbd9ccb](https://github.com/DarkCeptor44/nordle/commit/fbd9ccba5cab9a937b69640b56134081b7f216cc)) - DarkCeptor44
+
+- - -
+
 ## [v0.2.1](https://github.com/DarkCeptor44/nordle/compare/a5b1a35fcdd38c4ddd8a65893ecb6d2c3bda20d6..v0.2.1) - 2026-04-20
 #### Bug Fixes
 - (**ci**) pin cargo-chef and rust version in docker - ([a5b1a35](https://github.com/DarkCeptor44/nordle/commit/a5b1a35fcdd38c4ddd8a65893ecb6d2c3bda20d6)) - DarkCeptor44
