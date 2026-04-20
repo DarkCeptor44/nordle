@@ -61,17 +61,20 @@
 			}
 
 			header {
+				position: relative;
 				width: 100%;
-				text-align: center;
+				display: flex;
+				justify-content: center;
+				align-items: center;
 				padding: 10px 0;
-				border-bottom: 1px solid var(--bg-tertiary);
-				margin-bottom: 10px;
-				flex-shrink: 0;
+				border-bottom: 1px solid var(--border-default);
 			}
 
 			h1 {
+				margin: 0;
 				font-size: 2rem;
-				letter-spacing: 0.1em;
+				letter-spacing: 0.2em;
+				padding: 0;
 				font-weight: 700;
 				text-transform: uppercase;
 			}
@@ -541,10 +544,9 @@
 						() => {
 							guesses.push(currentGuess);
 							const won = data.won;
+							const target = data.target;
 							const lost =
-								guesses.length >= MAX_GUESSES &&
-								!won &&
-								data.target;
+								guesses.length >= MAX_GUESSES && !won && target;
 
 							if (won) {
 								isGameOver = true;
