@@ -1,6 +1,7 @@
 from_latest_tag = true
 ignore_merge_commits = true
 skip_untracked = true
+tag_prefix = "v"
 
 [commit_types]
 feat = { changelog_title = "Features" }
