@@ -113,7 +113,16 @@
 				font-weight: bold;
 				text-transform: uppercase;
 				user-select: none;
-				transition: transform 0.1s ease-in-out;
+				transition: background-color 0.1s ease;
+				will-change: transform;
+				transform-style: preserve-3d;
+				backface-visibility: visible;
+			}
+
+			.tile.flip {
+				transition: none !important;
+				animation: flip 600ms cubic-bezier(0.45, 0.05, 0.55, 0.95)
+					forwards !important;
 			}
 
 			.tile[data-state="active"] {
@@ -137,10 +146,6 @@
 				background-color: var(--color-miss);
 				border-color: var(--color-miss);
 				color: white;
-			}
-
-			.tile.flip {
-				animation: flip 400ms ease-in-out;
 			}
 
 			#keyboard-container {
@@ -429,13 +434,18 @@
 
 			@keyframes flip {
 				0% {
-					transform: rotateX(0);
+					transform: rotateY(0deg);
 				}
 				50% {
-					transform: rotateX(90deg);
+					transform: rotateY(90deg) scale(1.1);
+					border-color: var(--border-active);
+				}
+				51% {
+					border-color: transparent;
 				}
 				100% {
-					transform: rotateX(0);
+					transform: rotateY(0deg);
+					border-color: transparent;
 				}
 			}
 
@@ -717,8 +727,8 @@
 				const currentRowIndex = guesses.length;
 
 				const STAGGER = 100;
-				const FLIP_DURATION = 400;
-				const HALF_FLIP = 200;
+				const FLIP_DURATION = 600;
+				const HALF_FLIP = FLIP_DURATION / 2;
 
 				try {
 					const response = await fetch("/api/v1/guess", {
@@ -738,7 +748,10 @@
 						);
 
 						setTimeout(() => {
+							tile.classList.remove("flip");
+							void tile.offsetWidth;
 							tile.classList.add("flip");
+
 							setTimeout(() => {
 								tile.setAttribute("data-state", status);
 								updateKeyboardColor(currentGuess[i], status);
