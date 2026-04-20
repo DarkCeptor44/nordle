@@ -749,6 +749,7 @@
 					setTimeout(
 						() => {
 							guesses.push(currentGuess);
+
 							const won = data.won;
 							const target = data.target;
 							const lost =
@@ -953,7 +954,7 @@
 						<div class="setting-item">
 							<label for="specific-word">Play a specific word</label>
 							<div class="setting-control">
-								<input type="text" id="specific-word" maxlenth="5" placeholder="APPLE" />
+								<input type="text" id="specific-word" maxlength="5" placeholder="APPLE" />
 								<button onclick="chooseWord(document.getElementById('specific-word').value)">Set</button>
 							</div>
 						</div>
