@@ -212,7 +212,7 @@
 				top: 10%;
 				left: 50%;
 				transform: translateX(-50%);
-				z-index: 100;
+				z-index: 1002;
 				display: flex;
 				flex-direction: column;
 				align-items: center;
@@ -247,6 +247,147 @@
 			.toast.show {
 				opacity: 1;
 				transform: translateY(0);
+			}
+
+			#menu-btn {
+				position: absolute;
+				top: 50%;
+				right: 15px;
+				transform: translateY(-50%);
+				background: transparent;
+				border: none;
+				color: var(--text-secondary);
+				font-size: 1.5rem;
+				cursor: pointer;
+				line-height: 1;
+				padding: 5px;
+				z-index: 10;
+				transition: color 0.1s ease-in-out;
+			}
+
+			#menu-btn:hover {
+				color: var(--text-primary);
+			}
+
+			.modal-overlay {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: rgba(0, 0, 0, 0.7);
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				z-index: 1000;
+			}
+
+			.modal-content {
+				cursor: default;
+				background: var(--bg-secondary);
+				padding: 40px;
+				border-radius: 8px;
+				border: 1px solid var(--border-default);
+				text-align: center;
+				position: relative;
+				min-width: 300px;
+				box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+			}
+
+			.modal-content h2 {
+				margin-top: 0;
+				font-size: 1.8rem;
+				color: var(--text-primary);
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				padding: 8px 0;
+				border-bottom: 1px solid var(--border-default);
+			}
+
+			.modal-content p {
+				color: var(--text-secondary);
+				margin: 15px 0 5px;
+			}
+
+			.modal-content strong {
+				display: block;
+				font-size: 2rem;
+				margin-bottom: 25px;
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+			}
+
+			.modal-content button:not(.close-btn) {
+				background-color: var(--color-hit);
+				color: white;
+				border: none;
+				padding: 12px 16px;
+				border-radius: 4px;
+				font-weight: bold;
+				font-size: 1rem;
+				cursor: pointer;
+				transition:
+					opacity 0.2s ease,
+					transform 0.1s ease-in-out;
+			}
+
+			.modal-content button:not(.close-btn):hover {
+				opacity: 0.8;
+			}
+
+			.modal-content button:not(.close-btn):active {
+				transform: scale(1.1);
+			}
+
+			#modal-body {
+				display: flex;
+				flex-direction: column;
+			}
+
+			.close-btn {
+				position: absolute;
+				top: 5px;
+				right: 10px;
+				background: none;
+				border: none;
+				color: var(--text-secondary);
+				font-size: 1.2rem;
+				cursor: pointer;
+				padding: 5px;
+				transition: color 0.1s ease-in-out;
+			}
+
+			.close-btn:hover {
+				color: var(--text-primary);
+			}
+
+			.setting-item {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 15px 0;
+				border-bottom: 1px solid var(--border-default);
+				color: var(--text-primary);
+			}
+
+			.setting-item label {
+				padding-right: 8px;
+			}
+
+			.setting-control {
+				display: flex;
+				gap: 8px;
+			}
+
+			.setting-control input {
+				width: 80px;
+				padding: 8px;
+				background: var(--bg-secondary);
+				border: 1px solid var(--border-default);
+				color: var(--text-primary);
+				text-transform: uppercase;
+				text-align: center;
+				border-radius: 4px;
 			}
 
 			@keyframes pop {
@@ -320,7 +461,15 @@
 	<body>
 		<header>
 			<h1>Nordle</h1>
+			<button id="menu-btn" onclick="toggleModal()">⚙</button>
 		</header>
+
+		<div id="game-modal" class="modal-overlay" style="display: none">
+			<div class="modal-content">
+				<button class="close-btn" onclick="toggleModal()">✕</button>
+				<div id="modal-body"></div>
+			</div>
+		</div>
 
 		<div id="toast-container"></div>
 
@@ -419,6 +568,7 @@
 			let guesses = [];
 			let isGameOver = false;
 			let isAnimating = false;
+			let secretWord = "";
 
 			function initGame() {
 				const keys = document.querySelectorAll(".key");
@@ -430,9 +580,25 @@
 				});
 
 				document.addEventListener("keydown", handlePhysicalKeyboard);
+
+				const modal = document.getElementById("game-modal");
+				modal.addEventListener("click", (e) => {
+					if (e.target === e.currentTarget) {
+						toggleModal();
+					}
+				});
 			}
 
 			function handlePhysicalKeyboard(e) {
+				if (
+					e.key === "Escape" &&
+					document.getElementById("game-modal").style.display ===
+						"flex"
+				) {
+					toggleModal();
+					return;
+				}
+
 				if (isGameOver || isAnimating) return;
 
 				const key = e.key.toUpperCase();
@@ -565,11 +731,16 @@
 
 							if (won) {
 								isGameOver = true;
+								const winningWord = currentGuess;
 								showToast(getRandomPraise(), "success");
 								triggerWinAnimation(currentRowIndex);
+								setTimeout(
+									() => triggerGameOver(winningWord),
+									2500,
+								);
 							} else if (lost) {
 								isGameOver = true;
-								showToast("Game Over");
+								triggerGameOver(target);
 							}
 
 							currentGuess = "";
@@ -671,9 +842,12 @@
 			}
 
 			async function chooseWord(word) {
-				if (word.length !== WORD_LENGTH) return;
+				if (word.trim().length !== WORD_LENGTH) {
+					showToast(`Word must be ${WORD_LENGTH} letters`, "error");
+					return;
+				}
 
-				await reset(false);
+				await reset();
 
 				try {
 					const response = await fetch("/api/v1/choose", {
@@ -681,7 +855,7 @@
 						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify({
 							id: gameId,
-							word: word,
+							word: word.trim(),
 						}),
 					});
 
@@ -716,7 +890,56 @@
 				guesses = [];
 				isGameOver = false;
 
+				const modal = document.getElementById("game-modal");
+				modal.style.display = "none";
+
+				renderModalContent();
+
 				await getGame();
+			}
+
+			function toggleModal() {
+				const modal = document.getElementById("game-modal");
+				const display = modal.style.display;
+
+				if (display === "none") {
+					renderModalContent();
+					modal.style.display = "flex";
+				} else {
+					modal.style.display = "none";
+				}
+			}
+
+			function renderModalContent() {
+				const body = document.getElementById("modal-body");
+				const btn = document.getElementById("menu-btn");
+
+				if (isGameOver) {
+					btn.textContent = "📊";
+					body.innerHTML = `
+				        <h2>Game Over</h2>
+						<p>The word was <strong style="color:var(--color-partial)">${secretWord}</strong></p>
+						<button onclick="reset()">Play Again</button>
+					`;
+				} else {
+					btn.textContent = "⚙";
+					body.innerHTML = `
+						<h2>Settings</h2>
+						<div class="setting-item">
+							<label for="specific-word">Play a specific word</label>
+							<div class="setting-control">
+								<input type="text" id="specific-word" maxlenth="5" placeholder="APPLE" />
+								<button onclick="chooseWord(document.getElementById('specific-word').value)">Set</button>
+							</div>
+						</div>
+					`;
+				}
+			}
+
+			function triggerGameOver(word) {
+				isGameOver = true;
+				secretWord = word;
+				toggleModal();
 			}
 
 			getGame();
