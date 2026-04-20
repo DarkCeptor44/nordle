@@ -17,7 +17,7 @@ anyhow = "1.0.102"
 axum = { version = "0.8.9", features = ["http2"] }
 chrono = "0.4.44"
 clap = { version = "4.6.1", features = ["derive", "env"] }
-cuid2 = "0.1.4"
+cuid2 = "0.1.6"
 dotenvy = "0.15.7"
 log = "0.4.29"
 lru = "0.17.0"
@@ -31,3 +31,14 @@ tower = "0.5.3"
 tower-http = { version = "0.6.8", features = ["fs"] }
 utoipa = { version = "5.4.0", features = ["axum_extras"] }
 utoipa-swagger-ui = { version = "9.0.2", features = ["axum"] }
+
+[profile.release]
+strip = true
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[profile.fast]
+inherits = "release"
+lto = false

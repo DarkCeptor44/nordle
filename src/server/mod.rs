@@ -19,7 +19,7 @@ use std::{
 use tokio::net::TcpListener;
 
 pub struct Service {
-    cache: Mutex<LruCache<String, String>>,
+    cache: Mutex<LruCache<String, (u8, String)>>,
     words: Vec<&'static str>,
 }
 
@@ -34,7 +34,8 @@ impl Debug for Service {
 pub async fn serve(args: App) -> Result<()> {
     let service = Service {
         cache: Mutex::new(LruCache::new(
-            NonZeroUsize::new(10).ok_or(anyhow!("invalid cache size: {}", args.cache_size))?,
+            NonZeroUsize::new(args.cache_size)
+                .ok_or(anyhow!("invalid cache size: {}", args.cache_size))?,
         )),
         words: words(),
     };

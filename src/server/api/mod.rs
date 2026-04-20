@@ -18,7 +18,9 @@ pub fn routes(_service: &Service) -> Router<Arc<Service>> {
     if cfg!(debug_assertions) {
         use std::path::PathBuf;
         use tower_http::services::ServeFile;
-        let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("assets/index.html");
+        let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("assets")
+            .join("index.html");
 
         r.fallback_service(ServeFile::new(path))
     } else {
