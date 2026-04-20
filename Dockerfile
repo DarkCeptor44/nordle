@@ -1,26 +1,19 @@
-# stage 1: planner
-FROM rust:1.88-bookworm AS planner
-ARG BUILD_JOBS=1
+# stage 1: chef
+FROM lukemathwalker/cargo-chef:latest-rust-1.88.0-slim AS chef
 WORKDIR /app
-RUN cargo install cargo-chef --jobs $BUILD_JOBS
+ARG BUILD_JOBS=1
+
+# stage 2: planner
+FROM chef AS planner
 COPY . .
 RUN cargo chef prepare --recipe-path recipe.json
 
-# stage 2: cacher
-FROM rust:1.88-bookworm AS cacher
-ARG BUILD_JOBS=1
-WORKDIR /app
-RUN cargo install cargo-chef --jobs $BUILD_JOBS
+# stage 3: builder
+FROM chef AS builder
 COPY --from=planner /app/recipe.json recipe.json
 RUN cargo chef cook --release --recipe-path recipe.json --jobs $BUILD_JOBS
 
-# stage 3: builder
-FROM rust:1.88-bookworm AS builder
-ARG BUILD_JOBS=1
-WORKDIR /app
 COPY . .
-COPY --from=cacher /app/target target
-COPY --from=cacher /usr/local/cargo /usr/local/cargo
 RUN cargo build --release --jobs $BUILD_JOBS
 
 # stage 4: final build
