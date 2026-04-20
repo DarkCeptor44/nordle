@@ -687,8 +687,14 @@
 						);
 						tile.textContent = "";
 						tile.removeAttribute("data-state");
+						tile.classList.remove("flip");
 					}
 				}
+
+				const keys = document.querySelectorAll(".key");
+				keys.forEach((key) => {
+					key.removeAttribute("data-state");
+				});
 
 				gameId = "";
 				currentGuess = "";
