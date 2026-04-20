@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.2.1](https://github.com/DarkCeptor44/nordle/compare/a5b1a35fcdd38c4ddd8a65893ecb6d2c3bda20d6..v0.2.1) - 2026-04-20
+#### Bug Fixes
+- (**ci**) pin cargo-chef and rust version in docker - ([a5b1a35](https://github.com/DarkCeptor44/nordle/commit/a5b1a35fcdd38c4ddd8a65893ecb6d2c3bda20d6)) - DarkCeptor44
+
+- - -
+
 ## [v0.2.0](https://github.com/DarkCeptor44/nordle/compare/791f214b061e08bc11dc6e1be981d7c0f8b6d935..v0.2.0) - 2026-04-20
 #### Features
 - (**backend**) change default NORDLE_CACHE_SIZE to 100 - ([8dd5999](https://github.com/DarkCeptor44/nordle/commit/8dd599918b6160108af28a686995f892853ccc3a)) - DarkCeptor44

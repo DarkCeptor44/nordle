@@ -1,7 +1,6 @@
 # stage 1: chef
 FROM lukemathwalker/cargo-chef:latest-rust-1.88.0-slim AS chef
 WORKDIR /app
-ARG BUILD_JOBS=1
 
 # stage 2: planner
 FROM chef AS planner
@@ -11,10 +10,10 @@ RUN cargo chef prepare --recipe-path recipe.json
 # stage 3: builder
 FROM chef AS builder
 COPY --from=planner /app/recipe.json recipe.json
-RUN cargo chef cook --release --recipe-path recipe.json --jobs $BUILD_JOBS
+RUN cargo chef cook --release --recipe-path recipe.json
 
 COPY . .
-RUN cargo build --release --jobs $BUILD_JOBS
+RUN cargo build --release
 
 # stage 4: final build
 FROM gcr.io/distroless/cc-debian12

@@ -38,8 +38,6 @@ jobs:
         with:
           context: .
           push: true
-          build-args: |
-            BUILD_JOBS=4
           tags: |
             ghcr.io/${{ env.REPO_LC }}:latest
             ghcr.io/${{ env.REPO_LC }}:${{ github.ref_name }}
