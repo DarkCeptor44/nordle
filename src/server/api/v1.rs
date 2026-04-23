@@ -175,6 +175,17 @@ async fn guess(
     let target_chars: Vec<char> = target.chars().collect();
     let guess_chars: Vec<char> = guess.chars().collect();
 
+    if !is_valid_word(&guess) || guess_chars.len() != 5 {
+        debug!("invalid guess: id={} guess={}", payload.id, payload.guess);
+        return (
+            StatusCode::OK,
+            Json(GuessError {
+                message: "Invalid guess",
+            }),
+        )
+            .into_response();
+    }
+
     for i in 0..5 {
         if guess_chars[i] == target_chars[i] {
             results[i] = "hit";
