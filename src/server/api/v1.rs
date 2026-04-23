@@ -189,7 +189,7 @@ async fn guess(
     for i in 0..5 {
         if guess_chars[i] == target_chars[i] {
             results[i] = "hit";
-            *target_counts.get_mut(&guess_chars[i]).unwrap() -= 1;
+            target_counts.entry(guess_chars[i]).and_modify(|c| *c -= 1);
         }
     }
 
