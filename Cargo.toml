@@ -1,6 +1,6 @@
 [package]
 name = "nordle"
-version = "0.2.2"
+version = "0.2.3"
 authors = ["DarkCeptor44"]
 description = "A Wordle clone without limits"
 edition = "2024"

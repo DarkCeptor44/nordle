@@ -120,7 +120,7 @@ The minimum supported Rust version is:
 
 | Version | Edition | MSRV |
 | --- | --- | --- |
-| 0.1.0 - 0.1.1 | 2024 | 1.88 |
+| 0.1.0 - 0.2.3 | 2024 | 1.88 |
 
 ## Environment Variables
 
@@ -137,7 +137,7 @@ The following environment variables are currently supported, they are used if th
 
 | Auditor | Version | Vulnerabilities |
 | --- | --- | --- |
-| [cargo-audit](https://crates.io/crates/cargo-audit) | 0.1.0 | 0 |
+| [cargo-audit](https://crates.io/crates/cargo-audit) | 0.2.3 | 0 |
 
 ## License
 

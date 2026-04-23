@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.2.3](https://github.com/DarkCeptor44/nordle/compare/bd355a4424b57dc6deb6340e81b924c9dec50f53..v0.2.3) - 2026-04-23
+#### Bug Fixes
+- (**api**) prevent panic on invalid guess length - ([5ee61c6](https://github.com/DarkCeptor44/nordle/commit/5ee61c6c7a10fe46d12063baf7d574ec2f0a8f31)) - DarkCeptor44
+- (**backend**) add check to avoid processing a guess if it's not valid (in the allowed list) or not a 5-letter word - ([bd355a4](https://github.com/DarkCeptor44/nordle/commit/bd355a4424b57dc6deb6340e81b924c9dec50f53)) - DarkCeptor44
+
+- - -
+
 ## [v0.2.2](https://github.com/DarkCeptor44/nordle/compare/fbd9ccba5cab9a937b69640b56134081b7f216cc..v0.2.2) - 2026-04-20
 #### Bug Fixes
 - (**ci**) use non-slim version of rust image - ([fbd9ccb](https://github.com/DarkCeptor44/nordle/commit/fbd9ccba5cab9a937b69640b56134081b7f216cc)) - DarkCeptor44
