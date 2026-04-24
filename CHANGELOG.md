@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.3.0](https://github.com/DarkCeptor44/nordle/compare/e687f6f1c07eabcba3acbc4c0f61960c692f3daa..v0.3.0) - 2026-04-24
+#### Features
+- ![BREAKING](https://img.shields.io/badge/BREAKING-red) add version footer to modals and make health endpoint send back the version - ([5fd0a1d](https://github.com/DarkCeptor44/nordle/commit/5fd0a1dc352e55799475c4e0119c0dfdefee711b)) - DarkCeptor44
+#### Continuous Integration
+- switch to native arm64 runners and parallel builds - ([e687f6f](https://github.com/DarkCeptor44/nordle/commit/e687f6f1c07eabcba3acbc4c0f61960c692f3daa)) - DarkCeptor44
+
+- - -
+
 ## [v0.2.3](https://github.com/DarkCeptor44/nordle/compare/bd355a4424b57dc6deb6340e81b924c9dec50f53..v0.2.3) - 2026-04-23
 #### Bug Fixes
 - (**api**) prevent panic on invalid guess length - ([5ee61c6](https://github.com/DarkCeptor44/nordle/commit/5ee61c6c7a10fe46d12063baf7d574ec2f0a8f31)) - DarkCeptor44
