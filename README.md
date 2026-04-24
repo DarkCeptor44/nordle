@@ -53,6 +53,12 @@ services:
     restart: unless-stopped
     ports:
       - 8080:8080
+    volumes:
+      - /etc/localtime:/etc/localtime:ro # for correct timestamp in logs
+    deploy:
+      resources:
+        limits:
+          memory: 10m # you probably wont need more than 10MB of RAM
 ```
 
 For a list of available environment variables you can pass to the container, see [Environment Variables](#environment-variables). To add them you use:
