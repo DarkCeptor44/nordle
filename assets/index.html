@@ -306,7 +306,7 @@
 
 			.modal-content h2 {
 				margin-top: 0;
-				font-size: 1.8rem;
+				font-size: 1.5rem;
 				color: var(--text-primary);
 				text-transform: uppercase;
 				letter-spacing: 0.05em;
@@ -322,7 +322,7 @@
 			.modal-content strong {
 				display: block;
 				font-size: 2rem;
-				margin-bottom: 25px;
+				margin-bottom: 5px;
 				letter-spacing: 0.1em;
 				text-transform: uppercase;
 			}
@@ -352,6 +352,22 @@
 			#modal-body {
 				display: flex;
 				flex-direction: column;
+				gap: 15px;
+			}
+
+			.modal-footer {
+				margin-top: 10px;
+				border-top: 1px solid var(--border-default);
+				padding-top: 15px;
+				text-align: center;
+				font-size: 0.7rem;
+				flex-shrink: 0;
+				color: var(--text-secondary);
+				font-family:
+					ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+					monospace;
+				opacity: 0.6;
+				letter-spacing: 0.05em;
 			}
 
 			.close-btn {
@@ -375,8 +391,7 @@
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
-				padding: 15px 0;
-				border-bottom: 1px solid var(--border-default);
+				padding: 20px 0;
 				color: var(--text-primary);
 			}
 
@@ -503,6 +518,9 @@
 			<div class="modal-content">
 				<button class="close-btn" onclick="toggleModal()">✕</button>
 				<div id="modal-body"></div>
+				<div class="modal-footer">
+					Nordle <span id="version"></span>
+				</div>
 			</div>
 		</div>
 
@@ -981,6 +999,23 @@
 				toggleModal();
 			}
 
+			async function getVersion() {
+				try {
+					const response = await fetch("/api/v1/health");
+					const data = await response.json();
+
+					document.getElementById("version").textContent =
+						`v${data.version}`;
+				} catch (e) {
+					console.error(
+						"Failed to get version from health endpoint:",
+						e,
+					);
+					showToast("Error connecting to server", "error");
+				}
+			}
+
+			getVersion();
 			getGame();
 			initGame();
 		</script>

@@ -13,7 +13,9 @@ use clap::Parser;
 use dotenvy::dotenv;
 use log::{LevelFilter, error, info};
 use simplelog::{ColorChoice, CombinedLogger, ConfigBuilder, TermLogger, TerminalMode};
-use std::process::exit;
+use std::{env, process::exit};
+
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[derive(Debug, Parser)]
 #[command(version, about, long_about = None)]

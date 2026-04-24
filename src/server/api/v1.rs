@@ -4,7 +4,10 @@
 
 #![allow(clippy::needless_for_each)]
 
-use crate::server::{Service, utils::is_valid_word};
+use crate::{
+    VERSION,
+    server::{Service, utils::is_valid_word},
+};
 use axum::{
     Json, Router,
     extract::{Path, State},
@@ -30,6 +33,7 @@ use utoipa::{OpenApi, ToSchema};
         GuessRequest,
         GuessResponse,
         GuessError,
+        HealthResponse,
         NewResponse,
         NewError
     ))
@@ -233,15 +237,35 @@ async fn guess(
         .into_response()
 }
 
+#[derive(Serialize, ToSchema)]
+struct HealthResponse<'a> {
+    /// Status
+    status: &'a str,
+
+    /// Version
+    version: &'a str,
+
+    /// Server time
+    server_time: &'a str,
+}
+
 /// Health check
 #[utoipa::path(get, path = "/api/v1/health", responses(
-    (status = 200, description = "Health check successful", body = String, example = "2026-03-31T11:34:49.810125500-03:00")
+    (status = 200, description = "Health check successful", body = HealthResponse, example = json!({"status":"ok","version":"1.0.0","server_time":"2026-03-31T11:34:49.810125500-03:00"})),
 ))]
-async fn health() -> String {
+async fn health() -> impl IntoResponse {
     let now = Local::now().to_rfc3339();
     debug!("health check at {now}");
 
-    now
+    (
+        StatusCode::OK,
+        Json(HealthResponse {
+            status: "ok",
+            version: VERSION,
+            server_time: &now,
+        }),
+    )
+        .into_response()
 }
 
 #[derive(Serialize, ToSchema)]
@@ -257,7 +281,7 @@ struct NewError<'a> {
 }
 
 /// Start a new game
-#[utoipa::path(get, path = "/api/v1/new",responses(
+#[utoipa::path(get, path = "/api/v1/new", responses(
     (status = 200, description = "Returns a new game ID", body = NewResponse, example = json!({"game_id":"lprcp4yara"})),
     (status = 500, description = "No words available", body = NewError, example = json!({"message":"No words available"})),
 ))]
