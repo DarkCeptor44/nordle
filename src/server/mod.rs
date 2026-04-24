@@ -53,7 +53,38 @@ pub async fn serve(args: App) -> Result<()> {
         .context(anyhow!("failed to bind to address: {addr}"))?;
     info!("listening on http://{}:{}/", args.host, args.port);
 
+    let shutdown_signal = async {
+        let event: &str;
+
+        #[cfg(unix)]
+        {
+            let mut terminate =
+                tokio::signal::unix::signal(tokio::signal::unix::SignalKind::terminate())
+                    .expect("failed to install signal handler");
+
+            tokio::select! {
+                _ = ctrl_c => event = "SIGINT",
+                _ = terminate.recv() => event = "SIGTERM",
+            };
+        }
+
+        #[cfg(windows)]
+        {
+            use tokio::signal::windows::{ctrl_break, ctrl_c};
+            let mut sig_c = ctrl_c().expect("failed to install ctrl+c handler");
+            let mut sig_break = ctrl_break().expect("failed to install ctrl+break handler");
+
+            tokio::select! {
+                _ = sig_c.recv() => event = "CTRL_C_EVENT",
+                _ = sig_break.recv() => event = "CTRL_BREAK_EVENT",
+            };
+        }
+
+        info!("{event} signal received, shutting down...");
+    };
+
     axum::serve(listener, app.into_make_service())
+        .with_graceful_shutdown(shutdown_signal)
         .await
         .context("failed to serve axum app")
 }

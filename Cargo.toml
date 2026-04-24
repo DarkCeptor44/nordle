@@ -26,7 +26,11 @@ rand = "0.10.1"
 serde = { version = "1.0.228", features = ["derive"] }
 simplelog = "0.12.2"
 time = "0.3.47"
-tokio = { version = "1.52.1", features = ["macros", "rt-multi-thread"] }
+tokio = { version = "1.52.1", features = [
+    "macros",
+    "rt-multi-thread",
+    "signal",
+] }
 tower = "0.5.3"
 tower-http = { version = "0.6.8", features = ["fs"] }
 utoipa = { version = "5.4.0", features = ["axum_extras"] }
