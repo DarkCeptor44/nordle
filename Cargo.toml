@@ -13,7 +13,7 @@ categories = ["games", "web-programming::http-server"]
 include = ["assets/**/*", "src/**/*", "Cargo.toml", "LICENSE", "README.md"]
 
 [dependencies]
-anyhow = "1.0.102"
+anyhow = "1.0.103"
 axum = { version = "0.8.9", features = ["http2"] }
 chrono = "0.4.44"
 clap = { version = "4.6.1", features = ["derive", "env"] }
