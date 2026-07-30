@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v1.0.0](https://github.com/DarkCeptor44/nordle/compare/c744fefc54b6fd985273e28410fc7b9f126da534..v1.0.0) - 2026-07-30
+#### Features
+- server now supports graceful exit in both windows and linux - ([e8dc289](https://github.com/DarkCeptor44/nordle/commit/e8dc289da7b898a9f78edae92c7ffb0186a41e55)) - DarkCeptor44
+#### Refactors
+- (**cli**) use VERSION constant in log message - ([c744fef](https://github.com/DarkCeptor44/nordle/commit/c744fefc54b6fd985273e28410fc7b9f126da534)) - DarkCeptor44
+
+- - -
+
 ## [v0.3.0](https://github.com/DarkCeptor44/nordle/compare/e687f6f1c07eabcba3acbc4c0f61960c692f3daa..v0.3.0) - 2026-04-24
 #### Features
 - ![BREAKING](https://img.shields.io/badge/BREAKING-red) add version footer to modals and make health endpoint send back the version - ([5fd0a1d](https://github.com/DarkCeptor44/nordle/commit/5fd0a1dc352e55799475c4e0119c0dfdefee711b)) - DarkCeptor44
