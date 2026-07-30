@@ -141,9 +141,9 @@ The following environment variables are currently supported, they are used if th
 
 ## Audits
 
-| Auditor | Version | Vulnerabilities |
-| --- | --- | --- |
-| [cargo-audit](https://crates.io/crates/cargo-audit) | 0.3.0 | 0 |
+| Auditor | Version | Date of Audit | Vulnerabilities |
+| --- | --- | --- | --- |
+| [cargo-audit](https://crates.io/crates/cargo-audit) | 0.3.0 | 2026-07-30 | 0 |
 
 ## License
 
