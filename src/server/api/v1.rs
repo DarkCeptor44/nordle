@@ -251,7 +251,7 @@ struct HealthResponse<'a> {
 
 /// Health check
 #[utoipa::path(get, path = "/api/v1/health", responses(
-    (status = 200, description = "Health check successful", body = HealthResponse, example = json!({"status":"ok","version":"1.0.0","server_time":"2026-03-31T11:34:49.810125500-03:00"})),
+    (status = 200, description = "Health check successful", body = HealthResponse, example = json!({"status":"ok","version":"1.0.1","server_time":"2026-03-31T11:34:49.810125500-03:00"})),
 ))]
 async fn health() -> impl IntoResponse {
     let now = Local::now().to_rfc3339();

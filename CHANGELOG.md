@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v1.0.1](https://github.com/DarkCeptor44/nordle/compare/ef239667fa8f31f3d2252ab0ab5f15cd1ec18074..v1.0.1) - 2026-07-30
+#### Bug Fixes
+- (**backend**) import ctrl_c correctly on linux - ([ef23966](https://github.com/DarkCeptor44/nordle/commit/ef239667fa8f31f3d2252ab0ab5f15cd1ec18074)) - DarkCeptor44
+
+- - -
+
 ## [v1.0.0](https://github.com/DarkCeptor44/nordle/compare/c744fefc54b6fd985273e28410fc7b9f126da534..v1.0.0) - 2026-07-30
 #### Features
 - server now supports graceful exit in both windows and linux - ([e8dc289](https://github.com/DarkCeptor44/nordle/commit/e8dc289da7b898a9f78edae92c7ffb0186a41e55)) - DarkCeptor44
